@@ -1,31 +1,26 @@
-const API = process.env.NEXT_PULIC_API_URL;
-const VERSION = process.env.NEXT_PULIC_API_VERSION;
+const API = process.env.NEXT_PUBLIC_API_URL;
+const VERSION = process.env.NEXT_PUBLIC_API_VERSION;
 
 const endPoints = {
   auth: {
-    login: `${API}/api/v1/auth/login`,
+    login: `${API}/api/${VERSION}/auth/login`,
     profile: `${API}/api/${VERSION}/auth/profile`,
   },
   products: {
-    getProduct: (id) => `${API}/api/${VERSION}/products/${id}`,
-    getProducts: (limit = 10, offset = 1) => `${API}/${VERSION}/products?limit=${limit}&offset=${offset}`,
-    postProducts: `${API}/api/${VERSION}/products/`,
-    putProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
-    deleteProducts: (id) => `${API}/api/${VERSION}/products/${id}`,
-  },
-  users: {
-    getUsers: `${API}/api/${VERSION}/users`,
-    postUsers: `${API}/api/${VERSION}/users`,
+    getProduct: (id) => `${API}/api/${VERSION}/products/${id}/`,
+    getProducts: (limit, offset) => `${API}/api/${VERSION}/products?limit=${limit}&offset=${offset}`,
+    addProducts: `${API}/api/${VERSION}/products`,
+    updateProducts: (id) => `${API}/api/${VERSION}/products/${id}/`,
+    deleteProducts: (id) => `${API}/api/${VERSION}/products/${id}/`,
   },
   categories: {
-    getCategories: `${API}/api/${VERSION}/categories`,
-    postCategories: `${API}/api/${VERSION}/categories`,
-    getCategoriesProduct: (id) => `${API}/api/${VERSION}/categories/${id}/products`,
-    putCategories: (id) => `${API}/api/${VERSION}/categories/${id}`,
+    getCategoriesList: `${API}/api/${VERSION}/categories/`,
+    addCategory: `${API}/api/${VERSION}/categories/`,
+    getCategoryItems: (id) => `${API}/api/${VERSION}/categories/${id}/products/`,
+    updateCategory: (id) => `${API}/api/${VERSION}/categories/${id}/`,
   },
   files: {
-    postFiles: `${API}/api/${VERSION}/files/upload`,
-    getFiles: (fileName) => `${API}/api/${VERSION}/${fileName}`,
+    addImage: `${API}/api/${VERSION}/files/upload/`,
   },
 };
 

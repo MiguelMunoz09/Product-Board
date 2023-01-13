@@ -1,33 +1,32 @@
-import endPoints from "../../services/api/index";
-import useFetch from "../../hooks/useFecth";
-import Image from "next/image";
-import { Chart } from "../../common/Chart";
+import { Fragment, useState } from "react";
+import { CheckIcon } from "@heroicons/react/solid";
+import Modal from "../../common/Modal.jsx";
+import FormProduct from "../../components/FormProduct.jsx";
 
-const PRODUCT_LIMIT = 15;
-const PRODUCT_OFFSET = 15;
-
-export default function Dashboard() {
-  const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, PRODUCT_OFFSET));
-
-  const categoryNames = products?.map((product) => product.category);
-  const categoryCount = categoryNames?.map((category) => category.name);
-
-  const countOccurrences = (arr) => arr.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {});
-
-  const data = {
-    datasets: [
-      {
-        label: "Category",
-        data: countOccurrences(categoryCount),
-        borderWidth: 2,
-        backgroundColor: ["#ffbb11", "#c0c0c0", "#50AF95", "f3ba2f", "#2a71d0"],
-      },
-    ],
-  };
+export default function products() {
+  const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState([]);
 
   return (
     <>
-      <Chart className="mb-8 mt-2" ChartData={data} />
+      <div className="lg:flex lg:items-center lg:justify-between mb-8">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Product List</h2>
+        </div>
+        <div className="mt-5 flex lg:mt-0 lg:ml-4">
+          <span className="sm:ml-3">
+            <button
+              type="button"
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => setOpen(true)}
+            >
+              <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Add Product
+            </button>
+          </span>
+        </div>
+      </div>
+
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -61,7 +60,7 @@ export default function Dashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <Image className="h-10 w-10 rounded-full" src={product.images[0]} alt={product.name} width={100} height={100} />
+                            <img className="h-10 w-10 rounded-full" src={product.images[0]} alt="" />
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{product.title}</div>
@@ -93,6 +92,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <Modal open={open} setOpen={setOpen}>
+        <FormProduct />
+      </Modal>
     </>
   );
 }
