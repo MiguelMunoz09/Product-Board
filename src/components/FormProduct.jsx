@@ -1,6 +1,42 @@
-export default function FormProduct() {
+import { useRef } from "react";
+import { addProduct } from ".././services/api/products";
+
+export default function FormProduct({ setOpen, setAlert }) {
+  const formRef = useRef(null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(formRef.current);
+    const data = {
+      title: formData.get("title"),
+      price: parseInt(formData.get("price")),
+      description: formData.get("description"),
+      categoryId: parseInt(formData.get("category")),
+      images: [formData.get("images").name],
+    };
+    addProduct(data)
+      .then(() => {
+        setAlert({
+          active: true,
+          message: "Product added successfully",
+          type: "success",
+          autoClose: false,
+        });
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlert({
+          active: true,
+          message: error.message,
+          type: "error",
+          autoClose: false,
+        });
+      });
+  };
+
   return (
-    <form>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <div className="overflow-hidden">
         <div className="px-4 py-5 bg-white sm:p-6">
           <div className="grid grid-cols-6 gap-6">
@@ -48,7 +84,7 @@ export default function FormProduct() {
             </div>
             <div className="col-span-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Cover photo</label>
+                {/* <label className="block text-sm font-medium text-gray-700">Cover photo</label> */}
                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                   <div className="space-y-1 text-center">
                     <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">

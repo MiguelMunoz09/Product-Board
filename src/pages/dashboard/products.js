@@ -1,14 +1,56 @@
-import { Fragment, useState } from "react";
-import { CheckIcon } from "@heroicons/react/solid";
+import { useState, useEffect } from "react";
+import { CheckIcon, XCircleIcon } from "@heroicons/react/solid";
 import Modal from "../../common/Modal.jsx";
 import FormProduct from "../../components/FormProduct.jsx";
+import axios from "axios";
+import endPoints from "../../services/api/index.js";
+import Alert from "../../common/Alert.js";
+import useAlert from "../../hooks/useAlert.js";
+import { deleteProduct } from "../../services/api/products.js";
 
-export default function products() {
+export default function Products() {
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const { alert, setAlert, toggleAlert } = useAlert();
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const response = await axios.get(endPoints.products.allProducts);
+        setProducts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getProducts();
+  }, [alert]);
+
+  const handleDelete = (id) => {
+    deleteProduct(id).then(() => {
+      setAlert({
+        active: true,
+        message: "Product deleted successfully",
+        type: "error",
+        autoclose: true,
+      });
+    });
+  };
+
+  // useEffect(() => {
+  //   async function getProducts() {
+  //     const response = await axios.get[endPoints.products.allProducts];
+  //     setProducts(response.data);
+  //   }
+  //   try {
+  //     getProducts();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
 
   return (
     <>
+      <Alert alert={alert} handleClose={toggleAlert} />
       <div className="lg:flex lg:items-center lg:justify-between mb-8">
         <div className="flex-1 min-w-0">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Product List</h2>
@@ -26,7 +68,6 @@ export default function products() {
           </span>
         </div>
       </div>
-
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -80,9 +121,7 @@ export default function products() {
                         </a>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-                          Delete
-                        </a>
+                        <XCircleIcon className="flex-shrink-0 h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer" aria-hidden="true" onClick={() => handleDelete(product.id)} />
                       </td>
                     </tr>
                   ))}
@@ -93,7 +132,7 @@ export default function products() {
         </div>
       </div>
       <Modal open={open} setOpen={setOpen}>
-        <FormProduct />
+        <FormProduct setOpen={setOpen} setAlert={setAlert} />
       </Modal>
     </>
   );
