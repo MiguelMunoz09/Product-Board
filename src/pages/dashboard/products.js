@@ -7,6 +7,7 @@ import endPoints from "../../services/api/index.js";
 import Alert from "../../common/Alert.js";
 import useAlert from "../../hooks/useAlert.js";
 import { deleteProduct } from "../../services/api/products.js";
+import Link from "next/link.js";
 
 export default function Products() {
   const [open, setOpen] = useState(false);
@@ -116,9 +117,9 @@ export default function Products() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
+                        <Link href={`/dashboard/edit/${product.id}`} className="text-indigo-600 hover:text-indigo-900">
                           Edit
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <XCircleIcon className="flex-shrink-0 h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer" aria-hidden="true" onClick={() => handleDelete(product.id)} />
