@@ -17,7 +17,7 @@ const deleteProduct = async (id) => {
   return response.data;
 };
 
-const updateProducts = async (id, body) => {
+const updateProduct = async (id, body) => {
   const config = {
     headers: {
       accept: "*/*",
@@ -28,4 +28,4 @@ const updateProducts = async (id, body) => {
   return response.data;
 };
 
-export { addProduct, deleteProduct, updateProducts };
+export { addProduct, deleteProduct, updateProduct };

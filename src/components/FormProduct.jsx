@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { addProduct, updateProducts } from ".././services/api/products";
+import { addProduct, updateProduct } from ".././services/api/products";
 import { useRouter } from "next/router";
 
 export default function FormProduct({ setOpen, setAlert, product }) {
@@ -18,10 +18,8 @@ export default function FormProduct({ setOpen, setAlert, product }) {
     };
 
     if (product) {
-      updateProducts(product.id, data).then(() => {
-        () => {
-          router.push("/dashboard/products/");
-        };
+      updateProduct(product.id, data).then(() => {
+        router.push("/dashboard/products");
       });
     } else {
       addProduct(data)
@@ -35,7 +33,6 @@ export default function FormProduct({ setOpen, setAlert, product }) {
           setOpen(false);
         })
         .catch((error) => {
-          console.log(error);
           setAlert({
             active: true,
             message: error.message,
