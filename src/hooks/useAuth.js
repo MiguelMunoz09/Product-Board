@@ -32,10 +32,11 @@ function useProvideAuth() {
     console.log(access_token);
 
     if (access_token) {
-      Cookies.set("token", access_token.access_token, { expire: 5 });
-      console.log(access_token);
+      const token = access_token.access_token;
+      Cookies.set("token", token, { expire: 5 });
+      console.log(token);
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const { data: user } = await axios.get(endPoints.auth.profile);
       console.log(user);
       setUser(user);
@@ -45,7 +46,7 @@ function useProvideAuth() {
   const logout = () => {
     Cookies.remove("token");
     setUser(null);
-    delete axios.default.headers.Authorization;
+    delete axios.defaults.headers.Authorization;
     window.location.href = "/login";
   };
 
